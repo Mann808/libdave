@@ -18,7 +18,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake build-essential libssl-dev nlohmann-json3-dev ninja-build
 
-      - name: Build
+      - name: Build MLSPP first
+        run: |
+          cd cpp/third_party/mlspp
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
+          sudo cmake --install build
+
+      - name: Build libdave
         run: |
           cd cpp
           cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
