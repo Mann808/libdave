@@ -18,14 +18,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake build-essential libssl-dev nlohmann-json3-dev ninja-build curl zip unzip tar pkg-config
 
-      - name: Show CMakeLists
+      - name: Show structure
         run: |
-          echo "=== Full CMakeLists.txt ==="
-          cat ./cpp/CMakeLists.txt
-          echo "=== cpp folder structure ==="
-          ls -la ./cpp/
-          echo "=== Any mlspp references ==="
-          grep -r "mlspp\|MLSPP" ./cpp/CMakeLists.txt
+          echo "=== Makefile ==="
+          cat ./cpp/Makefile
+          echo "=== vcpkg-alts ==="
+          ls -la ./cpp/vcpkg-alts/
+          find ./cpp/vcpkg-alts -name "*.cmake" -o -name "portfile.cmake" | head -20
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
