@@ -11,12 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake build-essential libssl-dev ninja-build curl zip unzip tar pkg-config make
+
+      - name: Full clone vcpkg
+        run: |
+          cd cpp
+          git submodule update --init --no-fetch vcpkg
+          git -C vcpkg fetch --unshallow
 
       - name: Bootstrap vcpkg
         run: |
@@ -28,9 +34,8 @@ jobs:
           cd cpp
           make shared
 
-      - name: Find and upload .so
+      - name: Find .so files
         run: |
-          echo "=== Find .so files ==="
           find ./cpp/build -name "*.so" 2>/dev/null
 
       - name: Upload artifact
