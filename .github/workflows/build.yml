@@ -18,11 +18,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake build-essential libssl-dev nlohmann-json3-dev ninja-build curl zip unzip tar pkg-config
 
+      - name: Show repo structure
+        run: |
+          find ./cpp -maxdepth 3 -name "*.json" | grep -v vcpkg/
+          find ./cpp -maxdepth 3 -name "vcpkg.json"
+          cat ./cpp/vcpkg.json 2>/dev/null || echo "No vcpkg.json found"
+
       - name: Install MLSPP via vcpkg
         run: |
           cd cpp
           ./vcpkg/bootstrap-vcpkg.sh
-          ./vcpkg/vcpkg install
+          ./vcpkg/vcpkg install mlspp --triplet x64-linux
 
       - name: Build libdave
         run: |
