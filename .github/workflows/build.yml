@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,6 +35,11 @@ jobs:
       - name: Find .so files
         run: |
           find ./cpp/build -name "*.so" 2>/dev/null
+
+      - name: Check GLIBC version
+        run: |
+          objdump -T ./cpp/build/libdave.so 2>/dev/null | grep GLIBC | sed 's/.*GLIBC_\([.0-9]*\).*/\1/' | sort -V | tail -1 || \
+          find ./cpp/build -name "*.so" -exec objdump -T {} \; | grep GLIBC | sed 's/.*GLIBC_\([.0-9]*\).*/\1/' | sort -V | tail -1
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
